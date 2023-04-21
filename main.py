@@ -39,8 +39,13 @@ for book_num,book_url in enumerate(book_urls):
     driver.get(book_url)
     #get price
     price=driver.find_element(By.XPATH,"//*[@id=\"BookDetails\"]/div/div[2]/div/span")
-    newBookInformation["price"] = price
-
+    newBookInformation["price"] = price.text
+    #get score
+    scoreWidth = driver.find_element(By.XPATH, "/html/body/div[2]/div/main/div/article/div[1]/div[3]/a/div/div/div").get_attribute("style")
+    widthArray=scoreWidth.split()
+    widthNum=float(widthArray[1].replace("px","").replace(";",""))
+    score="{:.2f}".format((widthNum*5)/90)
+    newBookInformation["score"] = score
     #get all rows of the table containig some of the information about the book
     rows = driver.find_elements(By.XPATH, "//*[@id=\"BookDetails\"]/table/tbody/tr")
     #get columns of eah row and fill newBookInformation dictionary with them
